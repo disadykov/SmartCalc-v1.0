@@ -103,6 +103,13 @@
 - `make leak_test` - проверка на утечкия
 - `make gcov_report` - запуск тестов и генерация отчета. `make open_report` - открывает отчет
 - `make clean` - удалить файлы сборки и временные файлы
-- `make install` -  собрать приложение. Автоматически откроется каталог `/home/SmartCalc-1.0` в нем будет находиться
+- `make install` -  собрать приложение. Автоматически откроется каталог `/home/SmartCalc-1.0` в нем будет находиться исполняемый файл программы `s21_smart_calc`
+- `make uninstall` -  удаляет приложение из `/home/SmartCalc-1.0`
 
-![SmartCalc](misc/rus/images/smartcalc.jpg)
+![SmartCalc](img/calc.png)
+
+![CreditCalc](img/credit.png)
+
+![DepozitCalc](img/depozit.png)
+
+![gcov](img/gcov.png)
