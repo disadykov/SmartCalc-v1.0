@@ -1,0 +1,39 @@
+#include <check.h>
+
+#include "../s21_core.h"
+
+#test test_remove_space_number1
+char s[] = "   X   X   X   ";
+char result[] = "XXX";
+s21_remove_space(s);
+ck_assert_str_eq(result, s);
+
+#test test_remove_space_number2
+char s[] = "XXX";
+char result[] = "XXX";
+s21_remove_space(s);
+ck_assert_str_eq(result, s);
+
+#test test_remove_space_number3
+char s[] = "ok";
+char result[] = "ok";
+s21_remove_space(NULL);
+ck_assert_str_eq(result, s);
+
+#test test_remove_space_number4
+char s[] = "";
+char result[] = "";
+s21_remove_space(s);
+ck_assert_str_eq(result, s);
+
+#test test_remove_space_number5
+char s[] = " ";
+char result[] = "";
+s21_remove_space(s);
+ck_assert_str_eq(result, s);
+
+#test test_remove_space_number6
+char s[] = "d DD  DDDDD              d   d d d";
+char result[] = "dDDDDDDDdddd";
+s21_remove_space(s);
+ck_assert_str_eq(result, s);

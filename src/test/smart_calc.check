@@ -1,0 +1,324 @@
+#include <check.h>
+#define M_PI 3.14159265358979323846
+#include "../s21_core.h"
+
+#test test_smart_calc_number1
+  char x[] = "4.0";
+  char expression[1024] = "(8+2*5)/(1+3*2-4)";
+  double answer = (8+2*5)/(1+3*2-4);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+  #test test_smart_calc_number2
+  char x[] = "4.0";
+  char expression[1024] = "2/(3+2)*5";
+  double answer = 2.0/(3+2)*5;
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+  #test test_smart_calc_number3
+  char x[] = "4.0";
+  char expression[1024] = "2/(3+2)*5^0";
+  double answer = 2.0/(3+2)*powf(5,0);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+  #test test_smart_calc_number4
+  char x[] = "4.0";
+  char expression[1024] = "2.0/(3+2)*5^0-+";
+  int error_code;
+  s21_calculation(expression, x, &error_code);
+  ck_assert_int_eq(ERROR_BAD_EXPRESSION, error_code);
+
+  #test test_smart_calc_number5
+  char x[] = "4.0";
+  char expression[1024] = "2/(3+2)*5mod1";
+  double answer = 2.0/(3+2)*fmod(5,1);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+  #test test_smart_calc_number6
+  char x[] = "4.0";
+  char expression[1024] = "9.99999+9.999999*9.999";
+  double answer = 9.99999 + 9.999999 * 9.999;
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+ #test test_smart_calc_number7
+  char x[] = "4.0";
+  char expression[1024] = "((1) - 2 - ((-3) - (4))) - 5 - (-6)";
+  double answer = ((1) - 2 - ((-3) - (4))) - 5 - (-6);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+ #test test_smart_calc_number8
+  char x[] = "4.0";
+  char expression[1024] = "+5-(+4)-x+((+x)-x-(-x))";
+  double answer = +5 - (+4) - atof(x) + (+(atof(x)) - atof(x) - (-(atof(x))));
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number9
+  char x[] = "-1234567.1234567";
+  char expression[1024] = "-x-(-x)";
+  double answer = -atof(x) - (-atof(x));
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number10
+  char x[] = "10.1";
+  char expression[1024] = "(-5) mod (-3)";
+  double answer = fmod(-5, -3);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number11
+  char x[] = "10.1";
+  char expression[1024] = "2^3^4";
+  double answer = powf(powf(2, 3), 4);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number12
+  char x[] = "10.1";
+  char expression[1024] = "1.0/2.0*(2.0-1.0)";
+  double answer = 1.0/2.0*(2.0-1.0);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+ #test test_smart_calc_number13
+  char x[] = "4.0";
+  char expression[1024] = "1.0/2.0*(2.0-1.0)(x)";
+  int error_code;
+  s21_calculation(expression, x, &error_code);
+  ck_assert_int_eq(ERROR_BAD_EXPRESSION, error_code);
+
+ #test test_smart_calc_number14
+  char x[] = "4.0";
+  char expression[1024] = "((2(+2+2)))";
+  int error_code;
+  s21_calculation(expression, x, &error_code);
+  ck_assert_int_eq(ERROR_BAD_EXPRESSION, error_code);
+
+#test test_smart_calc_number15
+  char x[] = "10.1";
+  char expression[1024] = "1.1 + 2.0 + (3 * 4.0) + (5 + 6.78)";
+  double answer = 1.1 + 2.0 + (3 * 4.0) + (5 + 6.78);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number16
+  char x[] = "-3";
+  char expression[1024] = "8^(1/(-x))";
+  double answer = 2.0;
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number17
+  char x[] = "-3";
+  char expression[1024] = "8^(1/(-x))";
+  double answer = 2.0;
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number18
+  char x[] = "1";
+  char expression[1024] = "asin(-x+1.5)+acos(-x)-atan(x+1)";
+  double answer = asin(-atof(x) + 1.5) + acos(-atof(x)) - atan(atof(x) + 1);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number19
+  char x[] = "100";
+  char expression[1024] = "log(x)+ln(-2.0+4.0)";
+  double answer = log10(atof(x)) + log(-2.0 + 4.0);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number20
+  double xx = M_PI;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%lf", xx);
+  char expression[1024] = "cos(x)";
+  double answer = cos(xx);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq_tol(answer, result, 1e-7);
+
+#test test_smart_calc_number21
+  double xx = M_PI;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%lf", xx);
+  char expression[1024] = "cos(x)";
+  double answer = cos(xx);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq_tol(answer, result, 1e-7);
+
+#test test_smart_calc_number22
+  double xx = M_PI / 2.0;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%.25lf", xx);
+  char expression[1024] = "-1*sin(cos(tan(-x^2)^3)^4)";
+  double answer = -1 * sinf(powf(cosf(powf(tanf(powf(-xx, 2)), 3)), 4));
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq_tol(answer, result, 1e-7);
+
+#test test_smart_calc_number23
+  double xx = M_PI;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%.25lf", xx);
+  char expression[1024] = "+x";
+  double answer = +xx;
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq_tol(answer, result, 1e-7);
+
+#test test_smart_calc_number24
+  double xx = M_PI;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%.25lf", xx);
+  char expression[1024] = "-x";
+  double answer = -xx;
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq_tol(answer, result, 1e-7);
+
+#test test_smart_calc_number25
+  double xx = M_PI;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%.25lf", xx);
+  char expression[1024] = "xmod(x+1.0)";
+  double answer = fmod(xx, xx + 1.0);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number26
+  double xx = M_PI;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%.25lf", xx);
+  char expression[1024] = "(-1 + (-1 - (1 + 1)) - (-1 + 1) - (-1 + (-1)))";
+  double answer = (-1 + (-1 - (1 + 1)) - (-1 + 1) - (-1 + (-1)));
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number27
+  double xx = M_PI;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%.25lf", xx);
+  char expression[1024] = "sqrt(25)";
+  double answer = sqrt(25);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq(answer, result);
+
+#test test_smart_calc_number28
+  double xx = M_PI;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%.25lf", xx);
+  char expression[1024] = "sqrt(x)";
+  double answer = sqrt(xx);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_double_eq_tol(answer, result, 1e-7);
+
+#test test_smart_calc_number29
+  double xx = -2;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%.25lf", xx);
+  char expression[1024] = "sqrt(x)";
+  double answer = sqrt(xx);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_int_eq(isnan(result), isnan(answer));
+
+#test test_smart_calc_number30
+  double xx = 0;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%.25lf", xx);
+  char expression[1024] = "sqrt(x) / x";
+  double answer = sqrt(xx) / xx;
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_int_eq(isinf(result), isinf(answer));
+
+#test test_smart_calc_number31
+  double xx = 0;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%.25lf", xx);
+  char expression[1024] = "log(x)";
+  double answer = log10(xx);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_int_eq(isinf(result), isinf(answer));
+
+#test test_smart_calc_number32
+  double xx = -2;
+  char x[256] = "";
+  strcpy(x, "");
+  sprintf(x, "%.25lf", xx);
+  char expression[1024] = "ln(x)";
+  double answer = log(xx);
+  double result = NAN;
+  int error_code;
+  result = s21_calculation(expression, x, &error_code);
+  ck_assert_int_eq(isnan(result), isnan(answer));
