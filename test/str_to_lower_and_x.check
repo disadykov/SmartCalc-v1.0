@@ -1,0 +1,57 @@
+#include <check.h>
+
+#include "../s21_core.h"
+
+#test test_str_to_lower_number1
+char s[] = "XXX";
+char result[] = "xxx";
+s21_to_lower(s);
+ck_assert_str_eq(result, s);
+
+#test test_str_to_lower_number2
+char s[] = "123";
+char result[] = "123";
+s21_to_lower(s);
+ck_assert_str_eq(result, s);
+
+#test test_str_to_lower_number3
+char s[] = "";
+char result[] = "";
+s21_to_lower(s);
+ck_assert_str_eq(result, s);
+
+#test test_str_to_lower_number4
+char s[] = " ";
+char result[] = " ";
+s21_to_lower(s);
+ck_assert_str_eq(result, s);
+
+#test test_str_to_lower_number5
+char s[] = "xxx";
+char result[] = "xxx";
+s21_to_lower(s);
+ck_assert_str_eq(result, s);
+
+#test test_str_to_lower_number6
+char s[] = "ok";
+char result[] = "ok";
+s21_to_lower(NULL);
+ck_assert_str_eq(result, s);
+
+#test test_str_to_lower_number7
+char s[] = "ok";
+char result[] = "ok";
+s21_replaceX(NULL, "x");
+ck_assert_str_eq(result, s);
+
+#test test_str_to_lower_number8
+char s[1024] = "sin(x)-3.4+6.0+6+6+6+6+6+66+6+6+6+6+6+6++6+6+6+6+6+6+6";
+char result[] = "sin((0-0.000000000000000004))-3.4+6.0+6+6+6+6+6+66+6+6+6+6+6+6++6+6+6+6+6+6+6";
+s21_replaceX(s, "-0.000000000000000004");
+ck_assert_str_eq(result, s);
+
+#test test_str_to_lower_number9
+char s[1024] = "sin(x)+cos(x)";
+char result[1023] = "s(x)+c(x)";
+s21_replace_functions(s);
+ck_assert_str_eq(result, s);
